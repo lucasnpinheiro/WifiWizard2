@@ -1173,6 +1173,18 @@ public class WifiWizard2 extends CordovaPlugin {
         serviceInfo = info.getBSSID();
       } else {
         serviceInfo = info.getSSID();
+
+        if(serviceInfo != null && serviceInfo.contains("unknown ssid")) {
+            NetworkInfo wifiInfo = connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+            String wifiName = wifiInfo.getExtraInfo();
+            if (wifiName.startsWith("\"")) {
+                wifiName = wifiName.substring(1, wifiName.length());
+            }
+            if (wifiName.endsWith("\"")) {
+                wifiName = wifiName.substring(0, wifiName.length() - 1);
+            }
+            serviceInfo = wifiName;
+        }
       }
   
       if (serviceInfo == null || serviceInfo.isEmpty() || serviceInfo == "0x") {
